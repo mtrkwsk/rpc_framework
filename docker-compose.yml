@@ -1,0 +1,136 @@
+version: "3.8"
+services:
+    rabbit:
+        image: rabbitmq_pwt
+        container_name: rabbitmq_pwt
+        build: ./rabbitmq_pwt/
+        restart: always
+        networks:
+         - pwt-network
+        volumes:
+         - ./rabbitmq_pwt/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+        ports:
+         - "1883:1883"
+         - "1884:1884"
+         - "5671:5671"
+         - "5672:5672"
+         - "15671:15671"
+         - "15672:15672"
+         - "15675:15675"
+        environment:
+         - TZ=Europe/Warsaw
+        
+    jupyterlab:
+        image: jupyter_pwt
+        container_name: jupyter_pwt
+        build: ./jupyter_pwt/
+        # volumes:
+        #   - type: bind
+        #     source: ./
+        #     target: /notebooks
+        volumes:
+         - ./:/notebooks/
+        ports:
+         - "8888:8888"
+        environment:
+         - TZ=Europe/Warsaw
+          # - JUPYTER_ENABLE_LAB=1
+          # - JUPYTER_TOKEN=witaj123
+          # - GRANT_SUDO=yes
+        # user: "root"  
+        networks:
+         - pwt-network
+        # command: start-notebook.sh --NotebookApp.notebook_dir=/notebooks
+
+    pwt_component1:
+      image: pwt_component
+      container_name: pwt_component1
+      build: .
+      volumes:
+        - ./:/pwt.component
+      ports:
+       - "7001:7001"
+      environment:
+       - COMPONENT_NAME=component1
+       - TZ=Europe/Warsaw
+      networks:
+       - pwt-network
+      # stdin_open: true
+      tty: true
+      # depends_on:
+      #   - rabbit
+
+    # pwt_component2:
+    #   image: pwt_component
+    #   container_name: pwt_component2
+    #   build: ./pwt.component/
+    #   volumes:
+    #     - type: bind
+    #       source: .\pwt.component\
+    #       target: /pwt.component
+    #   ports:
+    #    - "7002:7002"
+    #   environment:
+    #    - COMPONENT_NAME=channel
+    #    - TZ=Europe/Warsaw
+    #   networks:
+    #    - server-network
+    #   # stdin_open: true
+    #   tty: true
+    #   depends_on:
+    #     - rabbit
+
+    # pwt_component3:
+    #   image: pwt_component
+    #   container_name: pwt_component3
+    #   build: ./pwt.component/
+    #   volumes:
+    #     - type: bind
+    #       source: .\pwt.component\
+    #       # source: C:\_workspace\pwt.server_docker\pwt.component\
+    #       target: /pwt.component
+    #   #  - pwt_component:/pwt.component/
+    #   ports:
+    #    - "7003:7003"
+    #   environment:
+    #    - COMPONENT_NAME=receiver
+    #    - TZ=Europe/Warsaw
+    #   networks:
+    #    - pwt-network
+    #   # stdin_open: true
+    #   tty: true
+    #   depends_on:
+    #    - rabbit
+        
+      
+#    node_red:
+#        image: node-red:latest
+#        volumes:
+#         - ./docker_files/node_red_data:/data
+#        ports:
+#          - "1880:1880"
+#        environment:
+#         -  NODE_RED_CREDENTIAL_SECRET=witaj123
+#        networks:
+#         - server-network
+#         
+
+#    jekyll:
+#        image: jekyll/jekyll
+#        command: jekyll serve --watch --force_polling --verbose
+#        ports:
+#          - "4000:4000"
+#        volumes:
+#          - ./docker_files/jekyll/vol:/srv/jekyll
+#          
+
+
+# volumes:
+  # - "/etc/timezone:/etc/timezone:ro"
+  # - "/etc/localtime:/etc/localtime:ro"
+  # doctor_db:
+  # influxdbv2:
+  
+networks:
+  pwt-network:
+     driver: bridge

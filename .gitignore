@@ -1,0 +1,23 @@
+# byte code ignore
+*.pyc
+__pycache__
+
+# vscode
+*.vscode
+.vscode
+
+# idea / pycharm
+*.idea
+.idea
+
+# dat files
+*.dat
+
+# jupyter checkpoints
+.ipynb_checkpoints
+*.pclprof
+
+# Measurement data
+*.npy
+*.csv
+*.json

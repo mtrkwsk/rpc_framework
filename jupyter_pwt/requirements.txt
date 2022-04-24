@@ -1,0 +1,7 @@
+paho-mqtt
+numpy
+numexpr
+matplotlib
+coloredlogs
+nptdms
+net-tools

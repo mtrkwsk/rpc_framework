@@ -1,0 +1,6 @@
+coloredlogs==14.0
+humanfriendly==8.2
+paho-mqtt==1.5.1
+pyreadline==2.1
+numexpr==2.7.3
+ntplib==0.4.0
